@@ -1,6 +1,4 @@
 
-https://github.com/user-attachments/assets/9c9dd531-868f-4f15-b78b-14e4d037e404
-
 # Ratchet — Self-Healing Edge Device Supervisor
 
 An autonomous agent that continuously monitors edge device health, detects anomalies, diagnoses root causes, and takes self-healing actions — all while streaming real-time data to a sleek dashboard.
