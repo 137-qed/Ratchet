@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd -- "$(dirname -- "${BASH_SOURCE[0]}")"
+desktop_python=/usr/bin/python3
+
+if [[ ${1:-} == --menu ]]; then
+    shift
+    if [[ -x /usr/bin/ratchet ]]; then
+        exec /usr/bin/ratchet "$@"
+    fi
+fi
+
+if [[ ${1:-} == setup && $# == 1 ]]; then
+    if ! "$desktop_python" -c "import gi; gi.require_version('Gtk', '4.0'); gi.require_version('WebKit', '6.0')"; then
+        echo 'Install the Ubuntu desktop dependencies listed in README.md, then run ./ratchet setup again.' >&2
+        exit 1
+    fi
+
+    if [[ ! -x smartbackend/.venv/bin/python ]]; then
+        "$desktop_python" -m venv smartbackend/.venv
+    fi
+    smartbackend/.venv/bin/python -m pip install -r smartbackend/requirements.txt
+
+    if [[ ! -x llama.cpp/build/bin/llama-server && -z ${LLAMA_CPP_BASE_URL:-} ]]; then
+        cmake -S llama.cpp -B llama.cpp/build -DCMAKE_BUILD_TYPE=Release \
+            -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_EXAMPLES=OFF
+        cmake --build llama.cpp/build --target llama-server --parallel 2
+    fi
+
+    exec "$desktop_python" -B desktop/ratchet.py --install
+fi
+
+exec "$desktop_python" -B desktop/ratchet.py "$@"

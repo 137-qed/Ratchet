@@ -1,0 +1,44 @@
+agent:
+  interval_seconds: 60
+  auto_heal: true
+  history_size: 60
+
+thresholds:
+  cpu_warning: 85
+  cpu_critical: 95
+  memory_warning: 80
+  memory_critical: 95
+  disk_warning: 80
+  disk_critical: 95
+  temp_warning: 70
+  temp_critical: 85
+  anomaly_cycles: 3
+
+alerts:
+  telegram:
+    enabled: false
+  email:
+    enabled: false
+
+llm_models:
+  - name: GPT-4o
+    provider: OpenAI
+    status: offline
+    active: false
+  - name: Claude 3.5 Sonnet
+    provider: Anthropic
+    status: offline
+    active: false
+  - name: Gemini 2.0 Flash
+    provider: Google
+    status: offline
+    active: false
+  - name: llama3.2
+    provider: llama.cpp (Local)
+    status: connected
+    active: true
+
+server:
+  host: 127.0.0.1
+  port: 5000
+  debug: false

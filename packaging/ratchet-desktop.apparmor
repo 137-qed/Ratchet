@@ -1,0 +1,13 @@
+abi <abi/4.0>,
+include <tunables/global>
+
+# Let the packaged desktop create WebKit's sandbox on Ubuntu.
+profile ratchet-desktop /usr/bin/ratchet flags=(unconfined) {
+  userns,
+
+  /usr/bin/python3{,.[0-9]*} ix,
+  /usr/bin/bwrap ix,
+  /usr/bin/xdg-dbus-proxy ix,
+
+  include if exists <local/ratchet-desktop>
+}

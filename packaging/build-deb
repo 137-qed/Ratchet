@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.."
+root=$PWD
+version=${1:-0.1.2}
+dpkg --validate-version "$version"
+arch=$(dpkg --print-architecture)
+python="$root/smartbackend/.venv/bin/python"
+llama="$root/llama.cpp/build/bin"
+patchelf=${PATCHELF:-patchelf}
+
+if [[ ! -x $python || ! -x $llama/llama-server ]]; then
+    echo 'Run ./ratchet setup with the local llama.cpp build enabled before packaging.' >&2
+    exit 1
+fi
+command -v "$patchelf" >/dev/null
+
+work=$(mktemp -d)
+trap 'rm -rf -- "$work"' EXIT
+stage="$work/ratchet"
+app="$stage/usr/lib/ratchet"
+bin="$app/llama.cpp/build/bin"
+templates="$app/llama.cpp/models/templates"
+applications="$stage/usr/share/applications"
+icons="$stage/usr/share/icons/hicolor/scalable/apps"
+docs="$stage/usr/share/doc/ratchet"
+mkdir -p "$stage/DEBIAN" "$stage/etc/apparmor.d" "$stage/usr/bin" "$app/desktop" "$app/frontend" \
+    "$app/smartbackend/agent" "$app/smartbackend/tools" "$bin" "$templates" "$applications" "$icons" "$docs"
+
+"${CC:-cc}" -O2 -Wall -Wextra -o "$stage/usr/bin/ratchet" packaging/ratchet-launch.c
+install -m 0644 packaging/ratchet-desktop.apparmor "$stage/etc/apparmor.d/ratchet-desktop"
+install -m 0755 packaging/postinst packaging/prerm "$stage/DEBIAN/"
+printf '%s\n' /etc/apparmor.d/ratchet-desktop > "$stage/DEBIAN/conffiles"
+install -m 0644 packaging/local.ratchet.Ratchet.desktop "$applications/"
+install -m 0644 frontend/ratchet-logo.svg "$icons/local.ratchet.Ratchet.svg"
+install -m 0644 desktop/*.py "$app/desktop/"
+install -m 0644 frontend/* "$app/frontend/"
+install -m 0644 smartbackend/*.py "$app/smartbackend/"
+install -m 0644 smartbackend/agent/*.py "$app/smartbackend/agent/"
+install -m 0644 smartbackend/tools/*.py "$app/smartbackend/tools/"
+install -m 0644 packaging/config.yaml "$app/smartbackend/config.yaml"
+install -m 0644 llama.cpp/models/templates/meta-llama-Llama-3.2-3B-Instruct.jinja "$templates/"
+install -m 0644 LICENSE "$docs/LICENSE"
+install -m 0644 llama.cpp/LICENSE "$docs/llama.cpp-LICENSE"
+
+install -m 0755 "$llama/llama-server" "$bin/"
+LD_LIBRARY_PATH="$llama" ldd "$llama/llama-server" > "$work/llama-links"
+while IFS= read -r library; do
+    install -m 0755 "$library" "$bin/${library##*/}"
+done < <(awk -v path="$llama/" 'index($3, path) == 1 { print $3 }' "$work/llama-links")
+for elf in "$bin"/*; do
+    "$patchelf" --set-rpath '$ORIGIN' "$elf"
+done
+
+# Resolve the runtime dependencies with the versions already tested in the source environment.
+"$python" -m pip freeze > "$work/constraints.txt"
+"$python" -m pip install --disable-pip-version-check --no-compile --only-binary=:all: \
+    --target "$app/python" -r smartbackend/requirements.txt -c "$work/constraints.txt"
+rm -rf -- "$app/python/bin"
+
+size=$(du -sk "$stage" | cut -f1)
+cat > "$stage/DEBIAN/control" <<EOF
+Package: ratchet
+Version: $version
+Architecture: $arch
+Maintainer: Ratchet <ratchet@localhost>
+Section: utils
+Priority: optional
+Installed-Size: $size
+Depends: apparmor (>= 4.0), python3 (>= 3.12), python3 (<< 3.13), python3-gi, gir1.2-gtk-4.0, gir1.2-webkit-6.0, libstdc++6, libgcc-s1, libssl3t64, libgomp1, ca-certificates, openssh-client
+Description: Local edge device dashboard and assistant
+ Ratchet monitors local and external devices, displays live metrics, and
+ connects Talk with Doc to a local llama.cpp server.
+EOF
+
+mkdir -p dist
+artifact="ratchet_${version}_${arch}.deb"
+dpkg-deb --root-owner-group -Zxz -z3 --build "$stage" "$work/$artifact"
+mv -- "$work/$artifact" "dist/$artifact"
+printf '%s\n' "$root/dist/$artifact"

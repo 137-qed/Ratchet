@@ -1,0 +1,13 @@
+Ratchet's supervisor uses a language model for diagnosis and structured function calling.
+The Python backend collects metrics, sends them to the active model, executes requested tools,
+and records the results for the dashboard.
+
+Model providers
+
+- For local inference, run the compiled llama-server with the model alias named in smartbackend/config.yaml.
+  The default is llama3.2. Set LLAMA_CPP_BASE_URL if the server listens somewhere other than http://127.0.0.1:8080/v1.
+- For cloud inference, configure the active provider in smartbackend/config.yaml and set its API key in the
+  environment. The supervisor connects to the provider directly.
+
+The supervisor runs every 60 seconds by default. Its Python tools collect metrics, read recent logs,
+restart services, stop processes, clear caches, send alerts, and write local reports.

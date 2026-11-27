@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="application-name" content="Ratchet" />
+  <meta name="description"
+    content="Edge Devices Health Dashboard — Real-time monitoring and health checking for edge infrastructure." />
+  <title>Ratchet — Edge Device Health Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+
+<body>
+
+  <!-- ───── LEFT NAV ───── -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-brand">
+      <img src="ratchet-logo.svg" alt="Ratchet" class="brand-logo" />
+    </div>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#" class="nav-link active" data-view="dashboard" aria-label="Dashboard">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path
+            d="M4 13h6a1 1 0 001-1V4a1 1 0 00-1-1H4a1 1 0 00-1 1v8a1 1 0 001 1zm0 8h6a1 1 0 001-1v-4a1 1 0 00-1-1H4a1 1 0 00-1 1v4a1 1 0 001 1zm10 0h6a1 1 0 001-1v-8a1 1 0 00-1-1h-6a1 1 0 00-1 1v8a1 1 0 001 1zm0-18v4a1 1 0 001 1h6a1 1 0 001-1V4a1 1 0 00-1-1h-6a1 1 0 00-1 1z" />
+        </svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" class="nav-link" data-view="talkwithdoc" aria-label="Talk with Doc">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path
+            d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12zM7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z" />
+        </svg>
+        <span>Talk with Doc</span>
+      </a>
+      <a href="#" class="nav-link" data-view="alerts" aria-label="Alerts">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path
+            d="M12 2a7 7 0 00-7 7c0 3.53 1.13 5.2 2.16 6.67.46.66.84 1.22 1.08 1.88A2 2 0 0010.16 19h3.68a2 2 0 001.92-1.45c.24-.66.62-1.22 1.08-1.88C17.87 14.2 19 12.53 19 9a7 7 0 00-7-7zM9 21a3 3 0 006 0H9z" />
+        </svg>
+        <span>Alerts</span>
+        <span class="nav-badge" id="alertBadge">3</span>
+      </a>
+      <a href="#" class="nav-link" data-view="analytics" aria-label="Analytics">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path d="M3 3v18h18M7 16l4-4 4 4 5-6" />
+        </svg>
+        <span>Analytics</span>
+      </a>
+      <a href="#" class="nav-link" data-view="network" aria-label="Network">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.22.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zM17.9 17.39A1.99 1.99 0 0016 16h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41C18.93 5.77 22 8.65 22 12c0 2.08-.8 3.97-2.1 5.39z" />
+        </svg>
+        <span>Network</span>
+      </a>
+      <a href="#" class="nav-link" data-view="settings" aria-label="Settings">
+        <svg class="nav-icon" viewBox="0 0 24 24">
+          <path
+            d="M19.14 12.94a7 7 0 000-1.88l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.49.49 0 00-.59-.22l-2.39.96a7.04 7.04 0 00-1.63-.94l-.36-2.54A.48.48 0 0013.92 2h-3.84a.48.48 0 00-.48.41l-.36 2.54a7.04 7.04 0 00-1.63.94l-2.39-.96a.49.49 0 00-.59.22L2.71 8.87a.49.49 0 00.12.61l2.03 1.58a7 7 0 000 1.88l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.04.69 1.63.94l.36 2.54c.05.24.26.41.48.41h3.84c.24 0 .44-.17.48-.41l.36-2.54a7.04 7.04 0 001.63-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.49.49 0 00-.12-.61l-2.03-1.58zM12 15.5A3.5 3.5 0 1115.5 12 3.5 3.5 0 0112 15.5z" />
+        </svg>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-info">
+        <div class="user-avatar">A</div>
+        <div class="user-details">
+          <span class="user-name">Admin</span>
+          <span class="user-role">System Operator</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ───── CENTER WORKSPACE ───── -->
+  <main id="workspace" class="workspace">
+    <!-- Header -->
+    <header class="workspace-header">
+      <div class="header-left">
+        <h1 id="viewTitle">Dashboard</h1>
+        <span class="header-subtitle" id="viewSubtitle">Real-time edge device health overview</span>
+      </div>
+      <div class="header-right">
+        <div class="agent-dropdown" id="agentDropdown">
+          <button class="agent-dropdown-btn" id="agentDropdownBtn" title="Select agent model">
+            <svg class="agent-dropdown-icon" viewBox="0 0 24 24" fill="currentColor">
+              <path
+                d="M12 2a2 2 0 012 2c0 .74-.4 1.39-1 1.73V7h1a7 7 0 017 7h1a1 1 0 011 1v3a1 1 0 01-1 1h-1.07A7.001 7.001 0 0113 23h-2a7.001 7.001 0 01-6.93-4H3a1 1 0 01-1-1v-3a1 1 0 011-1h1a7 7 0 017-7h1V5.73c-.6-.34-1-.99-1-1.73a2 2 0 012-2zm-4 14a2 2 0 100 4 2 2 0 000-4zm8 0a2 2 0 100 4 2 2 0 000-4z" />
+            </svg>
+            <span class="agent-dropdown-label">Agent</span>
+            <span class="agent-model-name" id="activeModelName">GPT-4o</span>
+            <svg class="agent-chevron" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7 10l5 5 5-5z" />
+            </svg>
+          </button>
+          <div class="agent-dropdown-panel" id="agentDropdownPanel">
+            <div class="dropdown-panel-header">Connected Models</div>
+            <ul class="model-list" id="modelList">
+              <!-- populated by JS -->
+            </ul>
+          </div>
+        </div>
+        <button class="header-btn" id="refreshBtn" title="Refresh">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M17.65 6.35A7.96 7.96 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z" />
+          </svg>
+        </button>
+        <div class="live-indicator">
+          <span class="live-dot"></span>
+          <span>Live</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stat Cards -->
+    <section class="stat-cards" id="statCards">
+      <div class="stat-card" data-type="total" role="button" tabindex="0">
+        <div class="stat-icon total">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M20 3H4a2 2 0 00-2 2v4a2 2 0 002 2h16a2 2 0 002-2V5a2 2 0 00-2-2zm0 10H4a2 2 0 00-2 2v4a2 2 0 002 2h16a2 2 0 002-2v-4a2 2 0 00-2-2z" />
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Total Devices</span>
+          <span class="stat-value" id="totalDevices">0</span>
+        </div>
+        <div class="stat-trend up">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 14l5-5 5 5z" />
+          </svg>
+          <span>+2</span>
+        </div>
+      </div>
+      <div class="stat-card" data-type="online" role="button" tabindex="0">
+        <div class="stat-icon online">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Online</span>
+          <span class="stat-value online" id="onlineDevices">0</span>
+        </div>
+        <div class="stat-trend up">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 14l5-5 5 5z" />
+          </svg>
+          <span>98%</span>
+        </div>
+      </div>
+      <div class="stat-card" data-type="warning" role="button" tabindex="0">
+        <div class="stat-icon warning">
+          <svg viewBox="0 0 24 24">
+            <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" />
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Warnings</span>
+          <span class="stat-value warning" id="warningDevices">0</span>
+        </div>
+        <div class="stat-trend neutral">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 12h10" />
+          </svg>
+          <span>Stable</span>
+        </div>
+      </div>
+      <div class="stat-card" data-type="critical" role="button" tabindex="0">
+        <div class="stat-icon critical">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z" />
+          </svg>
+        </div>
+        <div class="stat-info">
+          <span class="stat-label">Critical</span>
+          <span class="stat-value critical" id="criticalDevices">0</span>
+        </div>
+        <div class="stat-trend down">
+          <svg viewBox="0 0 24 24">
+            <path d="M7 10l5 5 5-5z" />
+          </svg>
+          <span>+1</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Charts Area -->
+    <section class="charts-area" id="chartsArea">
+      <div class="chart-card clickable" data-atype="cpu" role="button" tabindex="0">
+        <div class="chart-header">
+          <h3>CPU Utilization</h3>
+          <span class="chart-label" id="cpuAvg">Avg: 0%</span>
+        </div>
+        <canvas id="cpuChart" width="600" height="100"></canvas>
+      </div>
+      <div class="chart-card clickable" data-atype="memory" role="button" tabindex="0">
+        <div class="chart-header">
+          <h3>Memory Usage</h3>
+          <span class="chart-label" id="memAvg">Avg: 0%</span>
+        </div>
+        <canvas id="memChart" width="600" height="100"></canvas>
+      </div>
+      <div class="chart-card clickable full-width" data-atype="network" role="button" tabindex="0">
+        <div class="chart-header">
+          <h3>Network I/O</h3>
+          <span class="chart-label" id="netAvg">Avg: 0 Mbps</span>
+        </div>
+        <canvas id="netChart" width="1200" height="80"></canvas>
+      </div>
+    </section>
+
+    <!-- Alerts / Events Table -->
+    <section class="events-section" id="eventsSection">
+      <div class="section-header">
+        <h3>Recent Events</h3>
+        <button class="text-btn" id="clearEventsBtn">Clear All</button>
+      </div>
+      <div class="events-table-wrap">
+        <table class="events-table" id="eventsTable">
+          <thead>
+            <tr>
+              <th>Severity</th>
+              <th>Device</th>
+              <th>Message</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="eventsTbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Agent Activity Panel -->
+    <section class="agent-section" id="agentSection">
+      <div class="section-header">
+        <div class="agent-header-left">
+          <h3>🤖 Agent Activity</h3>
+          <span class="agent-status-dot active" id="agentStatusDot"></span>
+          <span class="agent-label">Self-healing agent running</span>
+        </div>
+        <button class="text-btn" id="clearAgentEventsBtn">Clear</button>
+      </div>
+      <div class="events-table-wrap">
+        <table class="events-table agent-events-table" id="agentEventsTable">
+          <thead>
+            <tr>
+              <th>Event Type</th>
+              <th>Details</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody id="agentEventsTbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Device Detail Panel (hidden by default, appears when a device is selected) -->
+    <section class="device-detail" id="deviceDetail" style="display:none">
+      <div class="detail-header">
+        <button class="back-btn" id="detailBack" title="Back to dashboard">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+          </svg>
+        </button>
+        <h2 id="detailName">Device Name</h2>
+        <span class="status-pill" id="detailStatus">online</span>
+      </div>
+      <div class="detail-grid" id="detailGrid">
+        <!-- filled by JS -->
+      </div>
+      <div class="detail-charts" id="detailCharts">
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3>CPU</h3><span class="chart-label" id="detailCpuVal">0%</span>
+          </div>
+          <canvas id="detailCpuChart" width="600" height="140"></canvas>
+        </div>
+        <div class="chart-card">
+          <div class="chart-header">
+            <h3>Memory</h3><span class="chart-label" id="detailMemVal">0%</span>
+          </div>
+          <canvas id="detailMemChart" width="600" height="140"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── ANALYTICS VIEW (elaborated per-metric drilldown) ───── -->
+    <section class="analytics-view" id="analyticsView" style="display:none">
+
+      <!-- Home landing: real, clickable entry points instead of a placeholder page -->
+      <div class="stat-cards" id="analyticsHome">
+        <div class="stat-card" data-atype="devices" role="button" tabindex="0">
+          <div class="stat-icon total">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M20 3H4a2 2 0 00-2 2v4a2 2 0 002 2h16a2 2 0 002-2V5a2 2 0 00-2-2zm0 10H4a2 2 0 00-2 2v4a2 2 0 002 2h16a2 2 0 002-2v-4a2 2 0 00-2-2z" />
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Devices</span>
+            <span class="stat-value">Inventory & status</span>
+          </div>
+        </div>
+        <div class="stat-card" data-atype="hardware" role="button" tabindex="0">
+          <div class="stat-icon online">
+            <svg viewBox="0 0 24 24">
+              <path
+                d="M4 6h16v2H4V6zm0 5h16v2H4v-2zm0 5h10v2H4v-2z" />
+            </svg>
+          </div>
+          <div class="stat-info">
+            <span class="stat-label">Hardware</span>
+            <span class="stat-value">CPU, disk & network</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CPU across every monitored edge device — always on the Analytics page,
+           directly below the Devices / Hardware boxes -->
+      <div class="chart-card full-width analytics-cpu-card" id="anaCpuFullCard">
+        <div class="chart-header">
+          <h3>CPU Utilization by Device</h3>
+          <span class="chart-label" id="anaCpuFullAvg">Avg: 0%</span>
+        </div>
+        <canvas id="anaCpuFullChart" width="1200" height="260"></canvas>
+        <div class="cpu-legend" id="anaCpuLegend"></div>
+      </div>
+
+      <!-- Detail drilldown: shown once a specific box has been selected -->
+      <div class="device-detail" id="analyticsDetail" style="display:none">
+        <div class="detail-header">
+          <button class="back-btn" id="analyticsBack" title="Back to dashboard">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+            </svg>
+          </button>
+          <h2 id="analyticsTitle">Analytics</h2>
+          <span class="status-pill online" id="analyticsBadge"></span>
+        </div>
+
+        <!-- Standard drilldown content (all types except the enlarged CPU view) -->
+        <div id="analyticsStandard">
+          <div class="detail-grid" id="analyticsGrid">
+            <!-- filled by JS -->
+          </div>
+          <div class="detail-charts">
+            <div class="chart-card">
+              <div class="chart-header">
+                <h3>CPU Utilization</h3><span class="chart-label" id="anaCpuVal">0%</span>
+              </div>
+              <canvas id="anaCpuChart" width="600" height="140"></canvas>
+            </div>
+            <div class="chart-card">
+              <div class="chart-header">
+                <h3>Memory Usage</h3><span class="chart-label" id="anaMemVal">0%</span>
+              </div>
+              <canvas id="anaMemChart" width="600" height="140"></canvas>
+            </div>
+          </div>
+          <section class="events-section analytics-events-section" id="analyticsEventsSection">
+            <div class="section-header">
+              <h3 id="analyticsEventsTitle">Related Events</h3>
+            </div>
+            <div class="events-table-wrap">
+              <table class="events-table">
+                <thead>
+                  <tr>
+                    <th>Severity</th>
+                    <th>Message</th>
+                    <th>Time</th>
+                  </tr>
+                </thead>
+                <tbody id="analyticsEventsTbody"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- ───── CHAT VIEW (Talk with Doc) ───── -->
+    <section class="chat-view" id="chatView" hidden>
+      <div class="chat-messages" id="chatMessages" role="log" aria-label="Chat history" tabindex="0">
+        <div class="chat-welcome">
+          <div class="chat-welcome-icon">🩺</div>
+          <p>Ask me anything about your devices, system health, metrics, or apps. I have real-time access to your edge
+            agent data.</p>
+          <div class="chat-suggestions">
+            <button class="chat-suggestion" data-q="What's the current CPU and memory usage?">📊 CPU & Memory
+              usage</button>
+            <button class="chat-suggestion" data-q="Are there any active anomalies or warnings?">⚠️ Active
+              warnings</button>
+            <button class="chat-suggestion" data-q="Show me the top processes consuming resources">🔍 Top
+              processes</button>
+            <button class="chat-suggestion" data-q="What is the overall health of my device?">💚 Device health</button>
+          </div>
+        </div>
+      </div>
+      <div class="chat-input-area">
+        <div class="chat-input-wrap">
+          <textarea id="chatInput" aria-label="Message for Doc" placeholder="Ask Doc a question…" rows="1"></textarea>
+          <button type="button" class="chat-send-btn" id="chatSendBtn" title="Send" aria-label="Send">
+            <svg class="chat-send-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+            </svg>
+            <svg class="chat-stop-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <rect x="5" y="5" width="14" height="14" rx="2" />
+            </svg>
+            <span class="chat-stop-label" aria-hidden="true">Stop</span>
+          </button>
+        </div>
+        <span class="chat-disclaimer">Responses are based on real-time device metrics from your edge agent.</span>
+      </div>
+    </section>
+
+    <!-- ───── SETTINGS VIEW ───── -->
+    <section class="settings-view" id="settingsView" style="display:none">
+      <!-- Settings main grid -->
+      <div class="settings-grid" id="settingsGrid">
+        <button class="settings-card" id="manageModelsBtn">
+          <span class="settings-card-title">Manage Models</span>
+          <svg class="settings-card-arrow" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Manage Models sub-view -->
+      <div class="manage-models" id="manageModelsView" style="display:none">
+        <button class="mm-back-btn" id="mmBackBtn">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+          </svg>
+          Back
+        </button>
+
+        <div class="mm-section">
+          <label class="mm-label">Models via Cloud API:</label>
+          <div class="mm-api-row">
+            <input type="text" class="mm-api-input" id="mmApiKeyInput" placeholder="Enter API key…"
+              spellcheck="false" />
+            <button class="mm-connect-btn" id="mmConnectBtn">Connect</button>
+          </div>
+        </div>
+
+        <div class="mm-models-list" id="mmModelsList">
+          <!-- populated by JS (Cloud) -->
+        </div>
+
+        <div class="mm-section" style="margin-top: 24px;">
+          <label class="mm-label">Local Models:</label>
+        </div>
+        <div class="mm-models-list" id="mmLocalModelsList">
+          <!-- populated by JS (Local) -->
+        </div>
+    </section>
+
+  </main>
+
+  <!-- ───── RIGHT PANEL — EDGE DEVICES LIST ───── -->
+  <aside id="devicesPanel" class="devices-panel">
+    <div class="panel-header">
+      <h2>Edge Devices</h2>
+      <span class="device-count" id="deviceCount">0</span>
+    </div>
+    <div class="panel-search">
+      <input type="text" placeholder="Filter devices…" id="deviceFilterInput" />
+    </div>
+    <div class="device-list" id="deviceList">
+      <!-- filled by JS -->
+    </div>
+    <section class="nearby-devices" id="nearbyDevices" hidden>
+      <div class="nearby-heading">
+        <h3>Nearby Devices</h3>
+        <button type="button" class="nearby-connect" id="refreshNearby">Refresh</button>
+      </div>
+      <div class="nearby-list" id="nearbyList"></div>
+      <p class="nearby-note" id="pairingNotice" role="status"></p>
+    </section>
+  </aside>
+
+  <dialog class="device-dialog" id="publisherDialog" aria-labelledby="publisherTitle">
+    <form method="dialog">
+      <h2 id="publisherTitle">Send publisher</h2>
+      <p id="publisherInstructions"></p>
+      <label for="publisherLink">Invitation link</label>
+      <input id="publisherLink" type="url" readonly>
+      <p class="nearby-note" id="publisherNotice" role="status"></p>
+      <div class="device-dialog-actions">
+        <button class="nearby-connect" type="submit">Done</button>
+        <button class="nearby-connect" id="copyPublisherLink" type="button">Copy link</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="device-dialog" id="sshDialog" aria-labelledby="sshTitle">
+    <form id="sshForm" autocomplete="off">
+      <h2 id="sshTitle">SSH connection</h2>
+      <p id="sshInstructions"></p>
+      <label for="sshUsername">SSH username</label>
+      <input id="sshUsername" name="username" type="text" maxlength="64" required autofocus>
+      <label for="sshPassword">SSH password <span class="nearby-note">(optional)</span></label>
+      <input id="sshPassword" type="password" maxlength="1024" aria-describedby="sshPasswordHelp">
+      <p id="sshPasswordHelp">Leave blank to use an SSH key.</p>
+      <label for="sshPort">Port</label>
+      <input id="sshPort" name="port" type="number" min="1" max="65535" value="22" required>
+      <label for="sshTrustedHost">Saved SSH hostname <span class="nearby-note">(optional)</span></label>
+      <input id="sshTrustedHost" type="text" maxlength="253" placeholder="device.local" spellcheck="false" aria-describedby="sshHostHelp">
+      <p id="sshHostHelp">Enter the hostname if the device’s SSH host key is saved under that name.</p>
+      <p class="nearby-note" id="sshNotice" role="status"></p>
+      <div class="device-dialog-actions">
+        <button class="nearby-connect" id="closeSshDialog" type="button">Close</button>
+        <button class="nearby-connect" id="submitSsh" type="submit">Connect</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

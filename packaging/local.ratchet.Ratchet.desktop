@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Ratchet
+Comment=Monitor edge devices and talk with Doc
+Type=Application
+Exec=/usr/bin/ratchet
+Icon=local.ratchet.Ratchet
+Terminal=false
+StartupNotify=true
+StartupWMClass=local.ratchet.Ratchet
+Categories=System;Monitor;

@@ -1,0 +1,20 @@
+services:
+  ratchet-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ratchet-edge-agent
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./smartbackend/reports:/app/smartbackend/reports
+      - ./smartbackend/config.yaml:/app/smartbackend/config.yaml
+    restart: unless-stopped
+    privileged: true # needed for system metrics & actions
+    environment:
+      - PYTHONUNBUFFERED=1
+      # llama-server on the host must listen on an address reachable from Docker.
+      - LLAMA_CPP_BASE_URL=${LLAMA_CPP_BASE_URL:-http://host.docker.internal:8080/v1}
+      - LLAMA_CPP_API_KEY=${LLAMA_CPP_API_KEY:-llama.cpp}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

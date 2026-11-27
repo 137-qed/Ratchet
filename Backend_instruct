@@ -1,0 +1,149 @@
+Ratchet
+
+A background agent that continuously:
+
+Collects metrics
+
+Detects anomalies
+
+Diagnoses cause
+
+Fixes automatically (if safe)
+
+Sends report
+
+So it behaves like:
+
+“self-healing device supervisor”
+
+Core architecture (simple but powerful)
+Components
+1. Metrics Tool
+
+Collect:
+
+CPU %
+
+memory %
+
+disk %
+
+temperature
+
+battery/voltage (optional)
+
+logs
+
+Linux commands:
+
+top / psutil
+free
+df
+vcgencmd measure_temp (Raspberry Pi)
+journalctl / dmesg
+
+Python tool:
+
+get_system_metrics()
+
+2. Log Tool
+
+Reads:
+
+syslog
+
+app logs
+
+errors
+
+Expose:
+
+read_recent_logs()
+
+3. Action Tool (very important)
+
+Agent can actually act:
+
+restart_service(service)
+kill_process(pid)
+clear_cache()
+reboot_device()
+
+
+This makes it autonomous → judges love this.
+
+4. Alert Tool
+send_telegram()
+send_email()
+write_report()
+
+5. AI Agent (brain)
+
+Responsibilities:
+
+reason over metrics
+
+explain root cause
+
+decide action
+
+call tools
+
+Workflow logic
+
+Think like this:
+
+Every 60s:
+   → get metrics
+   → if abnormal:
+         read logs
+         diagnose
+         fix
+         notify
+
+Example reasoning:
+
+CPU = 98%
+Top process = python app
+Memory leak pattern
+→ restart service
+→ send report
+
+
+That’s real “agentic behavior”.
+
+Keep Similar Folder structure
+edge-agent/
+ ├─ tools/
+ │   ├─ metrics.py
+ │   ├─ logs.py
+ │   ├─ actions.py
+ │   └─ alerts.py
+ ├─ agent/
+ │   └─ supervisor_agent.py
+ ├─ config.yaml
+ ├─ docker-compose.yml
+ └─ README.md
+
+⭐ anomaly detection
+
+simple:
+
+if cpu > 85 for 3 cycles → abnormal
+
+
+or z-score
+
+⭐ multi-device
+
+monitor multiple IPs
+
+⭐ dashboard
+
+live metrics page
+
+⭐ self-healing
+
+auto restart services	
+
+Self-healing is the biggest wow factor.

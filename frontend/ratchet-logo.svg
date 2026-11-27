@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" fill="none">
+  <!-- Stylized "R" as stethoscope -->
+  <!-- Vertical stem of R (white/light) -->
+  <rect x="8" y="6" width="8" height="48" rx="2" fill="#e0e0e0"/>
+  <!-- Top horizontal bar of R (white) -->
+  <rect x="8" y="6" width="10" height="7" rx="2" fill="#e0e0e0"/>
+  <!-- Curve of R (white) -->
+  <path d="M18 6 C36 6, 36 28, 18 28" stroke="#e0e0e0" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <!-- Stethoscope tube (teal) - diagonal from R down to circle -->
+  <path d="M18 28 Q26 34, 34 42" stroke="#2bbcb3" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- Stethoscope chest piece (teal circle) -->
+  <circle cx="37" cy="45" r="6" fill="#2bbcb3"/>
+  <circle cx="37" cy="45" r="3" fill="#1a8a82"/>
+
+  <!-- "atchet" text -->
+  <text x="52" y="42" font-family="'Inter', 'Segoe UI', sans-serif" font-size="30" font-weight="500" fill="#2bbcb3" letter-spacing="-0.5">atchet</text>
+</svg>
